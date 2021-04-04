@@ -39,7 +39,17 @@ app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 function Book(info) {
     const placeholderImage = 'https://i.imgur.com/J5LVHEL.jpg';
 
+    if (info.imageLinks) {
+        let regex = /http/;
+        let secureURL = info.imageLinks.thumbnail.replace(regex, 'https');
+        this.imgURL = secureURL;
+    } else {
+        this.imgURL = placeholderImage;
+    }
+
     this.title = info.title || 'No title available'; // shortcircuit
+    this.description = info.description || 'No description available';
+    this.author = info.authors || 'No author available';
 
 }
 
@@ -62,11 +72,12 @@ function createSearch(request, response) {
     console.log(request.body.search);
 
     // can we convert this to ternary?
-    if (request.body.search[1] === 'title') { url += `+intitle:${request.body.search[0]}`; }
-    if (request.body.search[1] === 'author') { url += `+inauthor:${request.body.search[0]}`; }
+    (request.body.search[1] === 'title') ? url += `+intitle:${request.body.search[0]}`: console.log("byAuthor");
+    (request.body.search[1] === 'author') ? url += `+inauthor:${request.body.search[0]}`: console.log("byTitle");
 
     superagent.get(url)
         .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
-        .then(results => response.render('pages/show', { searchResults: results }));
+        .then(results => response.render('pages/searches/show', { searchResults: results }));
+
     // how will we handle errors?
 }
