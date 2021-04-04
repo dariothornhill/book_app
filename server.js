@@ -1,5 +1,6 @@
 'use strict';
 
+const { render } = require('ejs');
 // Application Dependencies
 const express = require('express');
 const superagent = require('superagent');
@@ -71,13 +72,18 @@ function createSearch(request, response) {
     console.log(request.body);
     console.log(request.body.search);
 
+
     // can we convert this to ternary?
     (request.body.search[1] === 'title') ? url += `+intitle:${request.body.search[0]}`: console.log("byAuthor");
     (request.body.search[1] === 'author') ? url += `+inauthor:${request.body.search[0]}`: console.log("byTitle");
 
     superagent.get(url)
         .then(apiResponse => apiResponse.body.items.map(bookResult => new Book(bookResult.volumeInfo)))
-        .then(results => response.render('pages/searches/show', { searchResults: results }));
+        .then(results => response.render('pages/searches/show', { searchResults: results }))
+        .catch(error => {
+            // how will we handle errors?
+            console.log("Promise Rejection Error Being Handled");
+            response.render('pages/error', { errorText: error });
+        });
 
-    // how will we handle errors?
 }
