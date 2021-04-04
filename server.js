@@ -10,12 +10,16 @@ const PORT = process.env.PORT || 3001;
 
 // Application Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static('public/styles'));
 
 // Set the view engine for server-side templating
 app.set('view engine', 'ejs');
 
 // API Routes
+
+// Testin Route
+app.get('/hello', (req, res) => { res.render('pages/index'); });
+
 // Renders the home page
 app.get('/', renderHomePage);
 
