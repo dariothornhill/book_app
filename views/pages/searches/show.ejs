@@ -3,14 +3,22 @@
 
 <head>
     <title>Book Collection</title>
+    <link rel="stylesheet" href="/base.css">
 </head>
 
 <body>
     <main>
         <% searchResults.forEach( book => { %>
+            <img src="<%= book.imgURL %>" alt="image" />
             <h3>
                 <%= book.title %>
             </h3>
+            <h4>
+                <%= book.author %>
+            </h4>
+            <p>
+                <%= book.description %>
+            </p>
             <% }) %>
     </main>
 </body>
