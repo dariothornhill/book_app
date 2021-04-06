@@ -13,6 +13,10 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public/styles'));
 
+// Database Setup
+const client = new pg.Client(process.env.DATABASE_URL);
+client.on('error', err => console.error(err));
+
 // Set the view engine for server-side templating
 app.set('view engine', 'ejs');
 
