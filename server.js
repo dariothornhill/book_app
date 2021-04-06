@@ -14,8 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public/styles'));
 
 // Database Setup
+const pg = require('pg');
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.error(err));
+client.connect().then(() => {
+    console.log('connected to database');
+    app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+});
 
 // Set the view engine for server-side templating
 app.set('view engine', 'ejs');
@@ -37,7 +42,7 @@ app.post('/searches', createSearch);
 // Catch-all
 app.get('*', (request, response) => response.status(404).send('This route does not exist'));
 
-app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
+// app.listen(PORT, () => console.log(`Listening on port: ${PORT}`));
 
 // HELPER FUNCTIONS
 // Only show part of this to get students started
@@ -55,13 +60,15 @@ function Book(info) {
     this.title = info.title || 'No title available'; // shortcircuit
     this.description = info.description || 'No description available';
     this.author = info.authors || 'No author available';
+    this.isbn = info.industryIdentifiers[0]["type"] + ' ' + info.industryIdentifiers[0]["identifier"];
 
 }
 
 // Note that .ejs file extension is not required
 
 function renderHomePage(request, response) {
-    response.render('pages/index');
+    const sql = 'SELECT * FROM books';
+    response.render('pages/index', { books: sql.rows });
 }
 
 function showForm(request, response) {
