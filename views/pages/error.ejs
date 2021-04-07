@@ -1,21 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <title>Error</title>
-    <link rel="stylesheet" href="/reset.css">
-    <link rel="stylesheet" href="/base.css">
-    <link rel="stylesheet" href="/layout.css">
-    <link rel="stylesheet" href="/modules.css">
-</head>
+<%- include('../layout/head', {page_title: 'Error' }) %>
 
-<body>
-    <main>
-        <h4>Something has gone wrong :/</h4>
-        <h5>
-            <%= errorText %>
-        </h5>
-    </main>
-</body>
+    <body>
+        <main>
+            <h4>Something has gone wrong :/</h4>
+            <h5>
+                <%= errorText %>
+            </h5>
+        </main>
+    </body>
 
 </html>
